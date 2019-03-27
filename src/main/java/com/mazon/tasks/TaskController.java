@@ -2,10 +2,7 @@ package com.mazon.tasks;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,6 +16,14 @@ public class TaskController {
     public ResponseEntity<List<Task>> getTasks(){
         List<Task> list = (List<Task>) taskRepository.findAll();
         return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping("/task/{id}")
+    public ResponseEntity<Task> getTaskById(@PathVariable(value = "id") Long id){
+        Task task = taskRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Task não encontrada: " + id));
+        return ResponseEntity.ok().body(task);
     }
 
     @PostMapping("/task")
